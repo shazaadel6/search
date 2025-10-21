@@ -29,9 +29,9 @@ def smart_search(query):
     cosine_scores = np.dot(query_emb, text_embs.T) / (np.linalg.norm(query_emb) * np.linalg.norm(text_embs, axis=1))
     top_idx = np.argmax(cosine_scores)
     if cosine_scores[0][top_idx] < 0.4:
-        return "❌ لم يتم العثور على نتائج قريبة. جرّب كتابة السؤال بطريقة مختلفة."
+        return " لم يتم العثور على نتائج قريبة. جرّب كتابة السؤال بطريقة مختلفة."
     result = students_data.iloc[top_idx]
-    return f"👤 الاسم: {result['name']}\n🆔 الرقم القومي: {result['national_id']}\n🏫 الصف: {result['grade']}\n💊 الحالة الصحية: {result['disease']}"
+    return f"الاسم: {result['name']}\n الرقم القومي: {result['national_id']}\n الصف: {result['grade']}\n الحالة الصحية: {result['disease']}"
 
 def speech_to_text(audio):
     if audio is None:
@@ -47,18 +47,18 @@ def speech_to_text(audio):
     except sr.UnknownValueError:
         return "لم أستطع فهم الصوت، حاول مرة أخرى."
 
-with gr.Blocks(title="📚 Student Search Assistant") as demo:
-    gr.Markdown("## 🎓 مساعد البحث عن الطلاب (عربي + إنجليزي)")
-    with gr.Tab("🔍 بحث نصي"):
+with gr.Blocks(title=" Student Search Assistant") as demo:
+    gr.Markdown("##  مساعد البحث عن الطلاب (عربي + إنجليزي)")
+    with gr.Tab(" بحث نصي"):
         query = gr.Textbox(label="اكتب اسم الطالب أو الرقم القومي أو المرض")
         text_output = gr.Textbox(label="النتيجة")
         text_button = gr.Button("ابحث")
         text_button.click(fn=smart_search, inputs=query, outputs=text_output)
-    with gr.Tab("🎤 بحث صوتي"):
+    with gr.Tab(" بحث صوتي"):
         audio_input = gr.Audio(sources=["microphone"], type="filepath", label="سجّل صوتك هنا")
         audio_text = gr.Textbox(label="النص المستخرج من الصوت")
-        convert_button = gr.Button("🎧 تحويل الصوت إلى نص")
+        convert_button = gr.Button(" تحويل الصوت إلى نص")
         convert_button.click(fn=speech_to_text, inputs=audio_input, outputs=audio_text)
-        result_button = gr.Button("🔍 ابحث بناءً على الصوت")
+        result_button = gr.Button(" ابحث بناءً على الصوت")
         result_button.click(fn=smart_search, inputs=audio_text, outputs=text_output)
 demo.launch()
